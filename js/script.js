@@ -28,7 +28,9 @@ const sectionObserver = new IntersectionObserver((entries) => {
   });
 }, { rootMargin: '-45% 0px -50% 0px' });
 navAnchors.forEach(a => {
-  const section = document.querySelector(a.getAttribute('href'));
+  const href = a.getAttribute('href');
+  if (!href.startsWith('#')) return; // links to other pages
+  const section = document.querySelector(href);
   if (section) sectionObserver.observe(section);
 });
 
@@ -85,13 +87,14 @@ phoneQuery.addEventListener('change', syncCards);
 syncCards();
 
 // Footer year
-document.getElementById('year').textContent = new Date().getFullYear();
+const yearEl = document.getElementById('year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 // Contact form: validates, then opens the visitor's email app with the enquiry pre-filled
 const CONTACT_EMAIL = 'gmengineering955@gmail.com';
 const form = document.getElementById('contactForm');
 const status = document.getElementById('formStatus');
-form.addEventListener('submit', (e) => {
+if (form) form.addEventListener('submit', (e) => {
   e.preventDefault();
   let valid = true;
   form.querySelectorAll('[required]').forEach(field => {
